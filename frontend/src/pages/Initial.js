@@ -6,16 +6,20 @@ import axios from "axios";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (props) => {
+  const [pages, setPages] = useState(null);
   const [list, setList] = useState([]);
+  const link =
+    "https://blog.apiki.com/wp-json/wp/v2/posts?_embed&categories=518";
 
   useEffect(() => {
     const getData = async (url) => {
       const resp = await axios(url);
       const data = await resp.data;
       setList(data);
+      setPages(resp.headers["x-wp-totalpages"]);
     };
 
-    getData("https://blog.apiki.com/wp-json/wp/v2/posts?_embed&categories=518");
+    getData(link);
   }, []);
 
   const renderList = (data) => {
@@ -32,11 +36,24 @@ export default (props) => {
     });
   };
 
+  const load = async () => {
+    if (!pages > 1) return;
+    const resp = await axios(link + "&page=2");
+    const data = await resp.data;
+    setList([...list, ...data]);
+    return renderList(list);
+  };
   return (
-    <>
+    <div className="d-flex flex-column">
       <Header title="Página inicial" subtitle="ticogostoso"></Header>
       <Container>{renderList(list)}</Container>
-      <button>Carregar Mais</button>
-    </>
+      <button
+        onClick={load}
+        className="m-2 p-2"
+        style={{ width: "300px", height: "50px", alignSelf: "center" }}
+      >
+        Carregar Mais
+      </button>
+    </div>
   );
 };
