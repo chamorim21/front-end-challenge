@@ -1,8 +1,7 @@
-import React from 'react';
-import { Jumbotron, Container } from 'react-bootstrap';
+import React from "react";
+import { Jumbotron, Container } from "react-bootstrap";
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default (props) => {
+export default function Header(props) {
   return (
     <Container>
       <Jumbotron className='mt-3 p-3'>
@@ -11,7 +10,7 @@ export default (props) => {
         {props.image && (
           <div>
             <img
-              style={{ width: '100%', height: '100%' }}
+              style={{ width: "100%", height: "100%" }}
               src={props.image}
               alt={props.title}
             />
@@ -20,4 +19,4 @@ export default (props) => {
       </Jumbotron>
     </Container>
   );
-};
+}

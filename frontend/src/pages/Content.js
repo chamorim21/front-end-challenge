@@ -25,8 +25,15 @@ export default function Content() {
 
   return (
     <>
-      <Header image={page.image} title={page.title} />
-      <Container dangerouslySetInnerHTML={{ __html: page.content }}></Container>
+      {!page.content && <Header title={"Loading..."} />}
+      {page && (
+        <>
+          <Header image={page.image} title={page.title} />
+          <Container
+            dangerouslySetInnerHTML={{ __html: page.content }}
+          ></Container>
+        </>
+      )}
     </>
   );
 }

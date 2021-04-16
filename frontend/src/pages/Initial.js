@@ -1,11 +1,10 @@
 import Header from "../components/Header";
-import Card from "../components/Card";
-import { Container, Button, Row, Col } from "react-bootstrap";
+import Card from "../components/Item";
+import { Container, Button, Row } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default (props) => {
+export default function Initial() {
   const [pages, setPages] = useState(null);
   const [list, setList] = useState([]);
   const [atualPage, setAtualPage] = useState(2);
@@ -53,7 +52,7 @@ export default (props) => {
 
   return (
     <div className='d-flex flex-column'>
-      <Header title='Página inicial' subtitle='inicial'></Header>
+      <Header title='Página inicial' subtitle='Postagens'></Header>
       <Container className='w-100 d-flex flex-column' style={{ gap: "3rem" }}>
         {renderList(list)}
       </Container>
@@ -66,4 +65,4 @@ export default (props) => {
       </Button>
     </div>
   );
-};
+}
