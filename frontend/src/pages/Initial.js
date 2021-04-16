@@ -1,6 +1,6 @@
 import Header from "../components/Header";
 import Card from "../components/Card";
-import { Container } from "react-bootstrap";
+import { Container, Button, Row, Col } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -8,52 +8,62 @@ import axios from "axios";
 export default (props) => {
   const [pages, setPages] = useState(null);
   const [list, setList] = useState([]);
+  const [atualPage, setAtualPage] = useState(2);
+
   const link =
     "https://blog.apiki.com/wp-json/wp/v2/posts?_embed&categories=518";
 
-  useEffect(() => {
-    const getData = async (url) => {
-      const resp = await axios(url);
-      const data = await resp.data;
-      setList(data);
-      setPages(resp.headers["x-wp-totalpages"]);
-    };
+  const getData = async (url) => {
+    const response = await axios(url);
+    const data = await response.data;
+    console.log(data);
+    setList(data);
+    setPages(response.headers["x-wp-totalpages"]);
+  };
 
+  useEffect(() => {
     getData(link);
   }, []);
 
-  const renderList = (data) => {
-    return data.map((item) => {
-      const image = item._embedded["wp:featuredmedia"][0].source_url;
+  const renderList = (pages) => {
+    return pages.map((page) => {
+      page.image = page._embedded["wp:featuredmedia"][0].source_url;
       return (
-        <Card
-          key={item.id}
-          title={item.title.rendered}
-          image={image}
-          link={item.link}
-        />
+        <Row>
+          <Card
+            key={page.id}
+            title={page.title.rendered}
+            image={page.image}
+            slug={page.slug}
+            link={page.link}
+          />
+        </Row>
       );
     });
   };
 
-  const load = async () => {
+  const loadMore = async () => {
     if (!pages > 1) return;
-    const resp = await axios(link + "&page=2");
-    const data = await resp.data;
+    const response = await axios(link + `&page=${atualPage}`);
+    const data = await response.data;
     setList([...list, ...data]);
+    setAtualPage(atualPage + 1);
     return renderList(list);
   };
+
   return (
-    <div className="d-flex flex-column">
-      <Header title="Página inicial" subtitle="ticogostoso"></Header>
-      <Container>{renderList(list)}</Container>
-      <button
-        onClick={load}
-        className="m-2 p-2"
+    <div className='d-flex flex-column'>
+      <Header title='Página inicial' subtitle='inicial'></Header>
+      <Container className='w-100 d-flex flex-column' style={{ gap: "3rem" }}>
+        {renderList(list)}
+      </Container>
+      <Button
+        onClick={loadMore}
+        className='m-2 p-2'
         style={{ width: "300px", height: "50px", alignSelf: "center" }}
       >
         Carregar Mais
-      </button>
+      </Button>
     </div>
   );
 };
