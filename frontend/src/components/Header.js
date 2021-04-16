@@ -5,6 +5,7 @@ export default function Header(props) {
   return (
     <Container>
       <Jumbotron className='mt-3 p-3'>
+        {props.children}
         <h1>{props.title}</h1>
         <p>{props.subtitle}</p>
         {props.image && (

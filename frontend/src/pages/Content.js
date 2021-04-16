@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container } from "react-bootstrap";
+import { Container, Button } from "react-bootstrap";
 import Header from "../components/Header";
 import axios from "axios";
 
@@ -23,12 +23,18 @@ export default function Content() {
     getData();
   }, [id]);
 
+  function Voltar() {
+    return <Button href='/'>Voltar</Button>;
+  }
+
   return (
     <>
       {!page.content && <Header title={"Loading..."} />}
       {page && (
         <>
-          <Header image={page.image} title={page.title} />
+          <Header image={page.image} title={page.title}>
+            <Voltar />
+          </Header>
           <Container
             dangerouslySetInnerHTML={{ __html: page.content }}
           ></Container>
